@@ -2,25 +2,65 @@ import os
 from tkinter import *
 from tkinter import Tk, Text, BOTH, W, N, E, S
 from tkinter.ttk import Frame, Button, Label, Style
-from tkinter import filedialog
+from tkinter import filedialog, scrolledtext
 from PIL import ImageTk,Image  
 
 def open_image():
     file = filedialog.askopenfilename()
-    img = ImageTk.PhotoImage(Image.open(file))
     canvas = Canvas(window, bg="white", height=400) 
-    canvas.grid(row=1, column=0, columnspan=4, rowspan=2, padx=5, sticky=E+W+S+N)     
+    canvas.grid(row=1, column=0, columnspan=4, rowspan=2, padx=5, sticky=E+W+S+N) 
+    img = ImageTk.PhotoImage(Image.open(file))    
     canvas.create_image(20,20, anchor=NW, image=img)    
     canvas.image = img
+    show_image_result(file)
+    show_matched_facts()
+    show_hit_rules()
+
+def show_image_result(file):
+    filename = file[20:]
+    outfile = file[:20] + "out" + filename
+    canvas = Canvas(window, bg="white", height=400) 
+    canvas.grid(row=1, column=4, columnspan=4, rowspan=2, padx=5, sticky=E+W+S+N)
+    img = ImageTk.PhotoImage(Image.open(outfile))    
+    canvas.create_image(20,20, anchor=NW, image=img)    
+    canvas.image = img
+    show_result(outfile)
+
+def show_result(outfile):
+    canvas1 = Canvas(window, bg="white") 
+    canvas1.grid(row=4, column=0, columnspan=2, padx=5, sticky=E+W+S+N)
+    if outfile != None:    
+        canvas1.create_text(50,20,fill="green",font="40",text="BERHASIL")
+    else:
+        canvas1.create_text(50,20,text="GAGAL")
+    lbl.grid(row=4,column=0)
+
+def show_matched_facts():
+    canvas4 = Canvas(window) 
+    canvas4.grid(row=4, column=3, columnspan=2, padx=5, sticky=E+W+S+N)
+    textPad = scrolledtext.ScrolledText(window, height=16, width=45)
+    file = open("D:/geometri-kbs/data/rules.clp").read()
+    if file != None:
+        textPad.insert('1.0',file)
+    canvas4.create_window(193,135,window=textPad)
+
+def show_hit_rules():
+    canvas5 = Canvas(window, bg="white") 
+    canvas5.grid(row=4, column=6, columnspan=2, padx=5, sticky=E+W+S+N)
+    textPad = scrolledtext.ScrolledText(window, height=16, width=45)
+    file = open("D:/geometri-kbs/data/rules.clp").read()
+    if file != None:
+        textPad.insert('1.0',file)
+    canvas5.create_window(193,135,window=textPad)
 
 def rule_editor():
-    os.system('python D:/Documents/Akademik/"Teknik Informatika"/"Semester 5"/"Inteligensi Buatan"/Tugas/"Tubes 2"/geometri-kbs/rule_editor.py')
+    os.system('python D:/geometri-kbs/rule_editor.py')
 
 def show_rules():
-    os.system('python D:/Documents/Akademik/"Teknik Informatika"/"Semester 5"/"Inteligensi Buatan"/Tugas/"Tubes 2"/geometri-kbs/show_rules.py')
+    os.system('python D:/geometri-kbs/show_rules.py')
 
 def show_facts():
-    os.system('python D:/Documents/Akademik/"Teknik Informatika"/"Semester 5"/"Inteligensi Buatan"/Tugas/"Tubes 2"/geometri-kbs/show_facts.py')
+    os.system('python D:/geometri-kbs/show_facts.py')
 
 window = Tk()
 window.attributes("-fullscreen", True)
