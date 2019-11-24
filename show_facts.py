@@ -5,21 +5,21 @@ from tkinter import scrolledtext, Menu, filedialog, messagebox
 root = tkinter.Tk(className="Show Facts")
 textPad = scrolledtext.ScrolledText(root, width=100, height=80)
 
-def open_command():
-    file = open("D:/Documents/Akademik/Teknik Informatika/Semester 5/Inteligensi Buatan/Tugas/Tubes 2/geometri-kbs/facts.txt").read()
+def open():
+    file = open("D:/geometri-kbs/data/facts.clp").read()
     if file != None:
         textPad.insert('1.0',file)
 
-def exit_command():
+def exit():
     if messagebox.askokcancel("Quit", "Do you really want to quit?"):
         root.destroy()
 
 menu = Menu(root)
 root.config(menu=menu)
 filemenu = Menu(menu)
-open_command()
+open()
 menu.add_cascade(label="File", menu=filemenu)
-filemenu.add_command(label="Exit", command=exit_command)
+filemenu.add_command(label="Exit", command=exit)
 
 textPad.pack()
 root.mainloop()
