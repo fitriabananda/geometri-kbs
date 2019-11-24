@@ -82,7 +82,7 @@ def measuredegree(connectedline, savedlines, lineLength):
 
 
 
-def main(argv):
+def isi(argv):
     filename = argv[0]
     outfile = 'out' + filename
     savedlines = []
@@ -90,24 +90,34 @@ def main(argv):
     if src is None:
         print ('Error opening image!')
         return -1
+    image = cv.imread(cv.samples.findFile(filename))
+    output = image.copy()
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1.2, 100)
+    if (circles.any()):
+        isCircle =True
+        print("ada lingkaran :")
+        print(circles)
+
+    if circles is not None:
+	# convert the (x, y) coordinates and radius of the circles to integers
+	circles = np.round(circles[0, :]).astype("int")
+ 
+	# loop over the (x, y) coordinates and radius of the circles
+	for (x, y, r) in circles:
+		# draw the circle in the output image, then draw a rectangle
+		# corresponding to the center of the circle
+		cv.circle(output, (x, y), r, (0, 255, 0), 4)
+		cv.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+ 
+	# show the output image
+	cv.imwrite("outputcircle", np.hstack([image, output]))
+
     dst = cv.Canny(src, 50, 200, None, 3)
     cdst = cv.cvtColor(dst, cv.COLOR_GRAY2BGR)
     cdst2 = np.copy(cdst)
 
-    '''lines = cv.HoughLines(dst, 1, np.pi / 180, 50, None, 0, 0)
-    
-    if lines is not None:
-        for i in range(0, len(lines)):
-            print(lines[i])
-            rho = lines[i][0][0]
-            theta = lines[i][0][1]
-            a = math.cos(theta)
-            b = math.sin(theta)
-            x0 = a * rho
-            y0 = b * rho
-            pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
-            pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-            cv.line(cdst2, pt1, pt2, (0,0,255), 3, cv.LINE_AA)'''
+
     linesP = cv.HoughLinesP(dst, 1, np.pi / 180, 50, None, 50, 10)
     if linesP is not None:
         for i in range(0, len(linesP)):
@@ -184,6 +194,7 @@ def main(argv):
     print("panjang setiap garis, urutan sama kayak garis berdasarkan koordinat")
     print(lineLength)
 
+   
     angleDegree = []
     degreeAja = []
     for i in range (len(connectedlines)):
@@ -194,13 +205,11 @@ def main(argv):
         an_angle.append(degree)
         angleDegree.append(an_angle)
         degreeAja.append(degree)
+    count_degree = len(degreeAja)
     print("besar sudut, format : garis 1, garis 2, besar sudut, urutan garis sama kayak atas")
     print(angleDegree)
     #cv.imshow("Detected Lines (in red) - Standard Hough Line Transform", cdst2)
     #cv.imshow("Detected Lines (in red) - Probabilistic Line Transform", cdst)
     cv.imwrite(outfile,cdst)
     #cv.waitKey()
-    return 0
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
+    return (isCircle, circles, countLine, savedlines, lineLength, count_degree, angleDegree)
