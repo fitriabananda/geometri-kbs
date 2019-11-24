@@ -39,7 +39,7 @@ def show_matched_facts():
     canvas4 = Canvas(window) 
     canvas4.grid(row=4, column=3, columnspan=2, padx=5, sticky=E+W+S+N)
     textPad = scrolledtext.ScrolledText(window, height=16, width=45)
-    file = open("D:/geometri-kbs/data/rules.clp").read()
+    file = open("./data/shape_rules.clp").read()
     if file != None:
         textPad.insert('1.0',file)
     canvas4.create_window(193,135,window=textPad)
@@ -48,7 +48,7 @@ def show_hit_rules():
     canvas5 = Canvas(window, bg="white") 
     canvas5.grid(row=4, column=6, columnspan=2, padx=5, sticky=E+W+S+N)
     textPad = scrolledtext.ScrolledText(window, height=16, width=45)
-    file = open("D:/geometri-kbs/data/rules.clp").read()
+    file = open("./data/shape_rules.clp").read()
     if file != None:
         textPad.insert('1.0',file)
     canvas5.create_window(193,135,window=textPad)
