@@ -84,7 +84,7 @@ def measuredegree(connectedline, savedlines, lineLength):
 
 
 def isi(argv):
-    filename = argv[0]
+    filename = argv
     outfile = 'out' + filename
     savedlines = []
     src = cv.imread(cv.samples.findFile(filename), cv.IMREAD_GRAYSCALE)
@@ -203,4 +203,4 @@ def isi(argv):
     cv.imwrite(outfile,cdst)
     #cv.waitKey()
     return (isCircle, circles, countLine, savedlines, lineLength, count_degree, angleDegree)
-isi('../linkar.png')
+isi("../linkar.png")
