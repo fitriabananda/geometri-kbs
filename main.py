@@ -33,7 +33,7 @@ def open_image():
     show_hit_rules()
 
 def show_image_result(file):
-    outfile = ".\img\out" + file
+    outfile = "./img/out" + file
     canvas = Canvas(window, bg="white", height=400) 
     canvas.grid(row=1, column=4, columnspan=4, rowspan=2, padx=5, sticky=E+W+S+N)
     img = ImageTk.PhotoImage(Image.open(outfile))    

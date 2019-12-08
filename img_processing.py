@@ -2,6 +2,7 @@ import sys
 import math
 import cv2 as cv
 import numpy as np
+import ntpath as ntpath
 
 
 def isnear(ax1,ay1,ax2,ay2,bx1,by1,bx2,by2):
@@ -101,7 +102,8 @@ def ifSame(in1, in2) :
 
 def process(path):
     filename = path
-    outfile = '.\img\out' + filename
+    filebase = ntpath.basename(filename)
+    outfile = './img/out' + filebase
     savedlines = []
     src = cv.imread(cv.samples.findFile(filename), cv.IMREAD_GRAYSCALE)
     if src is None:
