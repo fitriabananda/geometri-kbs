@@ -3,8 +3,8 @@
             (slot shape-is)
             (slot jumlahsisi)
             (multislot besarsudut)
-            (multislot jenissudut)
             (multislot panjangsisi)
+            (slot jenissudut)
             (slot sisisejajar)
 )
 

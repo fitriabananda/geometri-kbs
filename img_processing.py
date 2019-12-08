@@ -223,9 +223,8 @@ def main(path):
     #cv.waitKey()
     return countLine, savedlines,lineLength, countDegree, angleDegree
 
-countLine, savedlines,lineLength, countDegree, angleDegree = main('layang.jpg')
-print(countLine)
-print(savedlines)
+countLine, savedlines,lineLength, countDegree, angleDegree = main('img/layang.jpg')
+print("jumlah sisi: " + str(countLine))
 print(lineLength)
 print(countDegree)
 print(angleDegree)
