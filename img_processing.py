@@ -98,6 +98,12 @@ def ifSame(in1, in2) :
     else :
         return in1, in2
 
+def ifLenSame(in1, in2) :
+    if abs(in1 - in2) < 8:
+        return in1, in1
+    else :
+        return in1, in2
+
 def crossPairAngle(degree1, degree2, pair):
     if (degree1[2] == degree2[2]):
         if (degree1[0] != degree2[0] and degree1[0] != degree2[1] and degree1[1] != degree2[0] and degree1[1] != degree2[1]):
@@ -244,11 +250,14 @@ def process(path):
     #print('pair sehadap: ')
     #print(facingCountPair)
     parallel = 0
+    for i in range (len(lineLength)):
+        for j in range (i+1, len(lineLength)):
+            lineLength[i], lineLength[j] = ifLenSame(lineLength[i],lineLength[j])
+    #print('parallel pair: ')
+    #print(parallel)
     for i in range (len(savedlines)):
         for j in range (i+1, len(savedlines)):
             parallel = parallelSide(savedlines, i, j, parallel)
-    #print('parallel pair: ')
-    #print(parallel)
     countDegree = len(angleDegree)
     #cv.imshow("Detected Lines (in red) - Standard Hough Line Transform", cdst2)
     #cv.imshow("Detected Lines (in red) - Probabilistic Line Transform", cdst)
@@ -256,7 +265,7 @@ def process(path):
     #cv.waitKey()
     return countLine, savedlines,lineLength, countDegree, angleDegree, crossCountPair, facingCountPair, parallel 
 
-countLine, savedlines,lineLength, countDegree, angleDegree, crossPair, facingPair, parallel = process('img/trapright.jpg')
+countLine, savedlines,lineLength, countDegree, angleDegree, crossPair, facingPair, parallel = process('img/bk.jpg')
 print("jumlah sisi: " + str(countLine))
 print(lineLength)
 print(countDegree)
