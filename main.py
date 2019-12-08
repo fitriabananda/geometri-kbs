@@ -54,13 +54,13 @@ def show_hit_rules():
     canvas5.create_window(193,135,window=textPad)
 
 def rule_editor():
-    os.system('python D:/geometri-kbs/rule_editor.py')
+    os.system('python ./rule_editor.py')
 
 def show_rules():
-    os.system('python D:/geometri-kbs/show_rules.py')
+    os.system('python ./show_rules.py')
 
 def show_facts():
-    os.system('python D:/geometri-kbs/show_facts.py')
+    os.system('python ./show_facts.py')
 
 window = Tk()
 window.attributes("-fullscreen", True)

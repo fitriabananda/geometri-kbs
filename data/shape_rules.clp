@@ -1,11 +1,17 @@
-;Start CLIPS
-(deftemplate shape "bentuk"
+
+(deftemplate shape
             (slot shape-is)
             (slot jumlahsisi)
             (multislot besarsudut)
             (multislot jenissudut)
             (multislot panjangsisi)
             (slot sisisejajar)
+)
+
+(defrule try
+    (initial-fact)
+    =>
+    (printout t"BEFORE"crlf) (py_pfact)
 )
 
 (defrule is-segitiga
@@ -27,6 +33,16 @@
     (jumlahsisi 6)
 => 
     (assert (shape-is segienam)))
+
+(defrule is-segitiga-sama-sisi
+    (shape-is segitiga)
+    (besarsudut ?s1 ?s2 ?s3)
+    (test (eq ?s1 ?s2))
+    (test (eq ?s1 ?s3))
+=>
+    (assert(shape-is segitiga-sama-sisi))
+)
+
 
 (defrule is-segitiga-siku
     (shape-is segitiga)
@@ -54,15 +70,6 @@
     (jenissudut lancip)
 =>
     (assert (shape-is segitiga-lancip))
-)
-
-(defrule is-segitiga-sama-sisi
-    (shape-is segitiga)
-    (panjangsisi ?s1 ?s2 ?s3)
-    (test (eq ?s1 ?s2))
-    (test (eq ?s1 ?s3))
-=>
-    (assert(shape-is segitiga-sama-sisi))
 )
 
 (defrule is-tumpul

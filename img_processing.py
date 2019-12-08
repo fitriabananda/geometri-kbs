@@ -39,6 +39,7 @@ def angle(x1, y1, x2, y2, len1, len2):
     return math.acos(cos)
 
 def measuredegree(connectedline, savedlines, lineLength):
+
     l1 = connectedline[0]
     len1 = lineLength[0]
     l2 = connectedline[1]
@@ -83,7 +84,7 @@ def measuredegree(connectedline, savedlines, lineLength):
 
 
 def isi(argv):
-    filename = argv[0]
+    filename = argv
     outfile = 'out' + filename
     savedlines = []
     src = cv.imread(cv.samples.findFile(filename), cv.IMREAD_GRAYSCALE)
@@ -98,20 +99,11 @@ def isi(argv):
         isCircle =True
         print("ada lingkaran :")
         print(circles)
-
-    if circles is not None:
-	# convert the (x, y) coordinates and radius of the circles to integers
-	circles = np.round(circles[0, :]).astype("int")
- 
-	# loop over the (x, y) coordinates and radius of the circles
-	for (x, y, r) in circles:
-		# draw the circle in the output image, then draw a rectangle
-		# corresponding to the center of the circle
-		cv.circle(output, (x, y), r, (0, 255, 0), 4)
-		cv.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
- 
-	# show the output image
-	cv.imwrite("outputcircle", np.hstack([image, output]))
+        circles = np.round(circles[0, :]).astype("int")
+        for(x, y, r) in circles:
+            cv.circle(output, (x, y), r, (0, 255, 0), 4)
+            cv.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
+            cv.imwrite("outputcircle", np.hstack([image, output]))
 
     dst = cv.Canny(src, 50, 200, None, 3)
     cdst = cv.cvtColor(dst, cv.COLOR_GRAY2BGR)
@@ -208,8 +200,7 @@ def isi(argv):
     count_degree = len(degreeAja)
     print("besar sudut, format : garis 1, garis 2, besar sudut, urutan garis sama kayak atas")
     print(angleDegree)
-    #cv.imshow("Detected Lines (in red) - Standard Hough Line Transform", cdst2)
-    #cv.imshow("Detected Lines (in red) - Probabilistic Line Transform", cdst)
     cv.imwrite(outfile,cdst)
     #cv.waitKey()
     return (isCircle, circles, countLine, savedlines, lineLength, count_degree, angleDegree)
+isi("../linkar.png")
