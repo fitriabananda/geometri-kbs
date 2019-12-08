@@ -1,0 +1,6 @@
+(initial-fact)
+(jumlahsisi 4)
+(panjangsisi 211.0 208.0 113.0 113.0)
+(besarsudut 90 90 90 90)
+(shape-is segiempat)
+(shape-is trapesium-kaki)

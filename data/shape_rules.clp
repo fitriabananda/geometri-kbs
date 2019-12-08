@@ -4,15 +4,11 @@
             (slot jumlahsisi)
             (multislot besarsudut)
             (multislot panjangsisi)
+            (slot jumlahsamaberhadapan)
             (slot jenissudut)
-            (slot sisisejajar)
 )
 
-(defrule try
-    (initial-fact)
-    =>
-    (printout t"BEFORE"crlf) (py_pfact)
-)
+
 
 (defrule is-segitiga
     (jumlahsisi 3)
