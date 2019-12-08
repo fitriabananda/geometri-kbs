@@ -99,9 +99,9 @@ def ifSame(in1, in2) :
 
 
 
-def main(path):
+def process(path):
     filename = path
-    outfile = 'out' + filename
+    outfile = '.\img\out' + filename
     savedlines = []
     src = cv.imread(cv.samples.findFile(filename), cv.IMREAD_GRAYSCALE)
     if src is None:
@@ -175,7 +175,7 @@ def main(path):
     if savedlines is not None:
         for i in range(0, len(savedlines)):
             #print(i, end= ' ')
-            print(savedlines[i])
+            #print(savedlines[i])
             l = savedlines[i]
             cv.line(cdst, (l[0], l[1]), (l[2], l[3]), (0,255,255), 3, cv.LINE_AA)
     #print(len(linesP))
@@ -223,8 +223,8 @@ def main(path):
     #cv.waitKey()
     return countLine, savedlines,lineLength, countDegree, angleDegree
 
-countLine, savedlines,lineLength, countDegree, angleDegree = main('img/layang.jpg')
-print("jumlah sisi: " + str(countLine))
-print(lineLength)
-print(countDegree)
-print(angleDegree)
+#countLine, savedlines,lineLength, countDegree, angleDegree = process('img/layang.jpg')
+#print("jumlah sisi: " + str(countLine))
+#print(lineLength)
+#print(countDegree)
+#print(angleDegree)

@@ -1,4 +1,6 @@
 import os 
+import img_processing as proc
+import shape_rules as shape
 from tkinter import *
 from tkinter import Tk, Text, BOTH, W, N, E, S
 from tkinter.ttk import Frame, Button, Label, Style
@@ -7,13 +9,27 @@ from PIL import ImageTk,Image
 
 def open_image():
     file = filedialog.askopenfilename()
+    loadclp = shape.Shape()
+    countLine, savedlines, lineLength, countDegree, angleDegree = proc.process(file)
+    jumlahsisi = "jumlahsisi " + str(countLine)
+    loadclp.add_fact(jumlahsisi)
+    panjangsisi = "panjangsisi "
+    for sisi in lineLength:
+        panjangsisi = panjangsisi + str(sisi) + " "
+    loadclp.add_fact(panjangsisi)
+    besarsudut = "besarsudut "
+    for sudut in angleDegree:
+        besarsudut = besarsudut + str(sudut[2]) + " "
+    loadclp.add_fact(besarsudut)
+
     canvas = Canvas(window, bg="white", height=400) 
     canvas.grid(row=1, column=0, columnspan=4, rowspan=2, padx=5, sticky=E+W+S+N) 
     img = ImageTk.PhotoImage(Image.open(file))    
     canvas.create_image(20,20, anchor=NW, image=img)    
     canvas.image = img
     show_image_result(os.path.basename(file))
-    show_matched_facts()
+    loadclp.run_clp()
+    show_matched_facts(loadclp)
     show_hit_rules()
 
 def show_image_result(file):
@@ -35,11 +51,17 @@ def show_result(outfile):
         canvas1.create_text(50,20,text="GAGAL")
     lbl.grid(row=4,column=0)
 
-def show_matched_facts():
+def show_matched_facts(loadclp):
     canvas4 = Canvas(window) 
     canvas4.grid(row=4, column=3, columnspan=2, padx=5, sticky=E+W+S+N)
     textPad = scrolledtext.ScrolledText(window, height=16, width=45)
-    file = open("./data/shape_rules.clp").read()
+    print(loadclp.py_pfact())
+    file = open("data/matched_facts.txt", "w+")
+    for f in loadclp.py_pfact():
+        file.write(str(f) + "\n")
+    file.close()
+    file = open("data/matched_facts.txt").read()
+    # file = open("data/shape_rules.clp").read()
     if file != None:
         textPad.insert('1.0',file)
     canvas4.create_window(193,135,window=textPad)
@@ -48,7 +70,7 @@ def show_hit_rules():
     canvas5 = Canvas(window, bg="white") 
     canvas5.grid(row=4, column=6, columnspan=2, padx=5, sticky=E+W+S+N)
     textPad = scrolledtext.ScrolledText(window, height=16, width=45)
-    file = open("./data/shape_rules.clp").read()
+    file = open("data/shape_rules.clp").read()
     if file != None:
         textPad.insert('1.0',file)
     canvas5.create_window(193,135,window=textPad)
