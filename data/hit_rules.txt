@@ -1,0 +1,6 @@
+(initial-fact)
+(besarsudut 60 60 60)
+(jumlahsisi 3)
+(shape-is segitiga)
+(shape-is segitiga-sama-sisi)
+(shape-is segitiga-sama-kaki)
