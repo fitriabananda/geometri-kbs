@@ -48,8 +48,8 @@
 
 (defrule is-segitiga-sama-kaki
     (shape-is segitiga)
-    (besarsudut ?sudut1 ?sudut2 ?)
-    (test (eq ?sudut1 ?sudut2))
+    (besarsudut ?sudut1 ?sudut2 ?sudut3)
+    (test (or(or(eq ?sudut1 ?sudut2)(eq ?sudut1 ?sudut3))(eq ?sudut2 ?sudut3)))
 =>
     (assert(shape-is segitiga-sama-kaki))
 )
@@ -69,20 +69,20 @@
 )
 
 (defrule is-tumpul
-    (besarsudut ?sudut)
-    (test (> ?sudut 90))
+    (besarsudut ?s1 ?s2 ?s3 )
+    (test (or(or(> ?s1 90)(> ?s2 90)) (> ?s3 90)))
 =>
     (assert (jenissudut tumpul)))
 
 (defrule is-lancip
-    (besarsudut ?sudut)
-    (test (< ?sudut 90))
+    (besarsudut ?s1 ?s2 ?s3 )
+    (test (or(or(< ?s1 90)(< ?s2 90)) (< ?s3 90)))
 => 
     (assert (jenissudut lancip)))
 
 (defrule is-siku
-    (besarsudut ?sudut)
-    (test (eq ?sudut 90))
+    (besarsudut ?s1 ?s2 ?s3 )
+    (test (or(or(eq ?s1 90)(eq ?s2 90)) (eq ?s3 90)))
 =>
     (assert (jenissudut siku)))
 
