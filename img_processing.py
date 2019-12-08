@@ -39,7 +39,6 @@ def angle(x1, y1, x2, y2, len1, len2):
     return math.acos(cos)
 
 def measuredegree(connectedline, savedlines, lineLength):
-
     l1 = connectedline[0]
     len1 = lineLength[0]
     l2 = connectedline[1]
@@ -82,34 +81,50 @@ def measuredegree(connectedline, savedlines, lineLength):
     return l1,l2,ang
 
 
+def toSpecialAngle(in_angle):
+    if abs(in_angle - 90) < 3 :
+        return 90
+    elif abs(in_angle - 60) < 3 :
+        return 60
+    elif abs(in_angle - 45) < 3 :
+        return 45
+    else :
+        return in_angle
 
-def isi(argv):
-    filename = argv
+def ifSame(in1, in2) :
+    if abs(in1 - in2) < 3:
+        return in1, in1
+    else :
+        return in1, in2
+
+
+
+def main(path):
+    filename = path
     outfile = 'out' + filename
     savedlines = []
     src = cv.imread(cv.samples.findFile(filename), cv.IMREAD_GRAYSCALE)
     if src is None:
         print ('Error opening image!')
         return -1
-    image = cv.imread(cv.samples.findFile(filename))
-    output = image.copy()
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1.2, 100)
-    if (circles.any()):
-        isCircle =True
-        print("ada lingkaran :")
-        print(circles)
-        circles = np.round(circles[0, :]).astype("int")
-        for(x, y, r) in circles:
-            cv.circle(output, (x, y), r, (0, 255, 0), 4)
-            cv.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
-            cv.imwrite("outputcircle", np.hstack([image, output]))
-
     dst = cv.Canny(src, 50, 200, None, 3)
     cdst = cv.cvtColor(dst, cv.COLOR_GRAY2BGR)
     cdst2 = np.copy(cdst)
 
-
+    '''lines = cv.HoughLines(dst, 1, np.pi / 180, 50, None, 0, 0)
+    
+    if lines is not None:
+        for i in range(0, len(lines)):
+            print(lines[i])
+            rho = lines[i][0][0]
+            theta = lines[i][0][1]
+            a = math.cos(theta)
+            b = math.sin(theta)
+            x0 = a * rho
+            y0 = b * rho
+            pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
+            pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
+            cv.line(cdst2, pt1, pt2, (0,0,255), 3, cv.LINE_AA)'''
     linesP = cv.HoughLinesP(dst, 1, np.pi / 180, 50, None, 50, 10)
     if linesP is not None:
         for i in range(0, len(linesP)):
@@ -120,7 +135,7 @@ def isi(argv):
     if linesP is not None:
         linenya = linesP[0][0]
         savedlines.append(linenya)
-        print('garis pada gambar (format koordinat awal dan akhir ==> x0,y0,x,y):')
+        #print('garis pada gambar (format koordinat awal dan akhir ==> x0,y0,x,y):')
         #print(savedlines)
         for i in range(1, len(linesP)):
             taken = True
@@ -164,8 +179,8 @@ def isi(argv):
             l = savedlines[i]
             cv.line(cdst, (l[0], l[1]), (l[2], l[3]), (0,255,255), 3, cv.LINE_AA)
     #print(len(linesP))
-    print("banyaknya garis")
-    print(len(savedlines))
+    #print("banyaknya garis")
+    #print(len(savedlines))
     countLine = len(savedlines)
 
     connectedlines = []
@@ -183,10 +198,9 @@ def isi(argv):
     for i in range (len(savedlines)):
         length = measurelength(savedlines[i])
         lineLength.append(length)
-    print("panjang setiap garis, urutan sama kayak garis berdasarkan koordinat")
-    print(lineLength)
+    #print("panjang setiap garis, urutan sama kayak garis berdasarkan koordinat")
+    #print(lineLength)
 
-   
     angleDegree = []
     degreeAja = []
     for i in range (len(connectedlines)):
@@ -194,13 +208,24 @@ def isi(argv):
         an_angle = []
         an_angle.append(l1)
         an_angle.append(l2)
-        an_angle.append(degree)
+        an_angle.append(toSpecialAngle(degree))
         angleDegree.append(an_angle)
         degreeAja.append(degree)
-    count_degree = len(degreeAja)
-    print("besar sudut, format : garis 1, garis 2, besar sudut, urutan garis sama kayak atas")
-    print(angleDegree)
+    #print("besar sudut, format : garis 1, garis 2, besar sudut, urutan garis sama kayak atas")
+    for i in range (len(angleDegree)):
+        for j in range (i+1, len(angleDegree)):
+            angleDegree[i][2], angleDegree[j][2] = ifSame(angleDegree[i][2], angleDegree[j][2])
+    #print(angleDegree)
+    countDegree = len(angleDegree)
+    #cv.imshow("Detected Lines (in red) - Standard Hough Line Transform", cdst2)
+    #cv.imshow("Detected Lines (in red) - Probabilistic Line Transform", cdst)
     cv.imwrite(outfile,cdst)
     #cv.waitKey()
-    return (isCircle, circles, countLine, savedlines, lineLength, count_degree, angleDegree)
-isi("../linkar.png")
+    return countLine, savedlines,lineLength, countDegree, angleDegree
+
+countLine, savedlines,lineLength, countDegree, angleDegree = main('layang.jpg')
+print(countLine)
+print(savedlines)
+print(lineLength)
+print(countDegree)
+print(angleDegree)
