@@ -12,19 +12,19 @@ def open_image():
     img = ImageTk.PhotoImage(Image.open(file))    
     canvas.create_image(20,20, anchor=NW, image=img)    
     canvas.image = img
-    show_image_result(file)
+    show_image_result(os.path.basename(file))
     show_matched_facts()
     show_hit_rules()
 
 def show_image_result(file):
-    filename = file[20:]
-    outfile = file[:20] + "out" + filename
+    outfile = ".\img\out" + file
     canvas = Canvas(window, bg="white", height=400) 
     canvas.grid(row=1, column=4, columnspan=4, rowspan=2, padx=5, sticky=E+W+S+N)
     img = ImageTk.PhotoImage(Image.open(outfile))    
     canvas.create_image(20,20, anchor=NW, image=img)    
     canvas.image = img
     show_result(outfile)
+    print(outfile)
 
 def show_result(outfile):
     canvas1 = Canvas(window, bg="white") 
