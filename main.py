@@ -27,10 +27,11 @@ def open_image():
     img = ImageTk.PhotoImage(Image.open(file))    
     canvas.create_image(20,20, anchor=NW, image=img)    
     canvas.image = img
-    show_image_result(os.path.basename(file))
-    loadclp.run_clp()
+    show_hit_rules(loadclp)
     show_matched_facts(loadclp)
-    show_hit_rules()
+    show_image_result(os.path.basename(file))
+    
+    
 
 def show_image_result(file):
     outfile = "./img/out" + file
@@ -46,31 +47,50 @@ def show_result(outfile):
     canvas1 = Canvas(window, bg="white") 
     canvas1.grid(row=4, column=0, columnspan=2, padx=5, sticky=E+W+S+N)
     if outfile != None:    
-        canvas1.create_text(50,20,fill="green",font="40",text="BERHASIL")
+        canvas1.create_text(50,20,fill="green",font="40",text=get_shape())
     else:
         canvas1.create_text(50,20,text="GAGAL")
     lbl.grid(row=4,column=0)
 
+def get_shape():
+    file = open("data/matched_facts.txt").read()
+    if file != None:
+        facts = file.splitlines()
+        print(facts)
+        for f in facts:
+            split_fact = f.split()
+            print(split_fact[0])
+            if (split_fact[0]) == "(shape-is":
+                shape = "(" + split_fact[1]
+    print(shape)
+    return shape
+
 def show_matched_facts(loadclp):
+    #loadclp.run_clp()
     canvas4 = Canvas(window) 
     canvas4.grid(row=4, column=3, columnspan=2, padx=5, sticky=E+W+S+N)
     textPad = scrolledtext.ScrolledText(window, height=16, width=45)
-    print(loadclp.py_pfact())
+    # print(loadclp.py_pfact())
     file = open("data/matched_facts.txt", "w+")
     for f in loadclp.py_pfact():
         file.write(str(f) + "\n")
     file.close()
     file = open("data/matched_facts.txt").read()
-    # file = open("data/shape_rules.clp").read()
     if file != None:
         textPad.insert('1.0',file)
     canvas4.create_window(193,135,window=textPad)
 
-def show_hit_rules():
+def show_hit_rules(loadclp):
     canvas5 = Canvas(window, bg="white") 
     canvas5.grid(row=4, column=6, columnspan=2, padx=5, sticky=E+W+S+N)
     textPad = scrolledtext.ScrolledText(window, height=16, width=45)
-    file = open("data/shape_rules.clp").read()
+    file = open("data/hit_rules.txt", "w+")
+    while (len(loadclp.print_agenda()) > 0):
+        for f in loadclp.print_agenda():
+            file.write(str(f) + "\n")    
+        loadclp.run_clp()
+    file.close()
+    file = open("data/hit_rules.txt").read()
     if file != None:
         textPad.insert('1.0',file)
     canvas5.create_window(193,135,window=textPad)
@@ -83,6 +103,12 @@ def show_rules():
 
 def show_facts():
     os.system('python ./show_facts.py')
+
+def run_rule():
+    loadclp = shape.Shape()
+    show_hit_rules(loadclp)
+    show_matched_facts(loadclp)  
+    loadclp.run_clp()
 
 window = Tk()
 window.attributes("-fullscreen", True)
@@ -125,5 +151,6 @@ cbtn.place(x=1180,y=110)
 
 dbtn = Button(window, text="Show Facts", width=20, command=show_facts)
 dbtn.place(x=1180,y=150) 
+
 
 window.mainloop()
