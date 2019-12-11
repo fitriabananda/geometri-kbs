@@ -4,7 +4,6 @@
             (slot jumlahsisi)
             (multislot besarsudut)
             (multislot panjangsisi)
-            (slot jumlahsamaberhadapan)
             (slot jenissudut)
 )
 
@@ -30,22 +29,6 @@
 => 
     (assert (shape-is segienam)))
 
-(defrule is-segitiga-sama-sisi
-    (shape-is segitiga)
-    (besarsudut ?s1 ?s2 ?s3)
-    (test (eq ?s1 ?s2))
-    (test (eq ?s1 ?s3))
-=>
-    (assert(shape-is segitiga-sama-sisi))
-)
-
-
-(defrule is-segitiga-siku
-    (shape-is segitiga)
-    (jenissudut siku)
-=>
-    (assert (shape-is segitiga-siku)))
-
 (defrule is-segitiga-sama-kaki
     (shape-is segitiga)
     (besarsudut ?sudut1 ?sudut2 ?sudut3)
@@ -67,6 +50,23 @@
 =>
     (assert (shape-is segitiga-lancip))
 )
+
+(defrule is-segitiga-siku
+    (shape-is segitiga)
+    (jenissudut siku)
+=>
+    (assert (shape-is segitiga-siku)))
+
+
+(defrule is-segitiga-sama-sisi
+    (shape-is segitiga)
+    (besarsudut ?s1 ?s2 ?s3)
+    (test (eq ?s1 ?s2))
+    (test (eq ?s1 ?s3))
+=>
+    (assert(shape-is segitiga-sama-sisi))
+)
+
 
 (defrule is-tumpul
     (besarsudut ?s1 ?s2 ?s3 )
