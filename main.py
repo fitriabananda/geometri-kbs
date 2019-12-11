@@ -10,7 +10,7 @@ from PIL import ImageTk,Image
 def open_image():
     file = filedialog.askopenfilename()
     loadclp = shape.Shape()
-    countLine, savedlines, lineLength, countDegree, angleDegree = proc.process(file)
+    countLine, savedlines, lineLength, countDegree, angleDegree, angleCross, angleFacing, countLineParallel = proc.process(file)
     jumlahsisi = "jumlahsisi " + str(countLine)
     loadclp.add_fact(jumlahsisi)
     panjangsisi = "panjangsisi "
@@ -21,6 +21,7 @@ def open_image():
     for sudut in angleDegree:
         besarsudut = besarsudut + str(sudut[2]) + " "
     loadclp.add_fact(besarsudut)
+    
 
     canvas = Canvas(window, bg="white", height=400) 
     canvas.grid(row=1, column=0, columnspan=4, rowspan=2, padx=5, sticky=E+W+S+N) 

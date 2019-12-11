@@ -95,10 +95,21 @@
     (assert (shape-is jajar-genjang))
     )
 
+(defrule is-belah-ketupat
+    (shape-is segiempat)
+    (shape-is jajar-genjang)
+    (panjangsisi ?s1 ?s2 ?s3 ?s4)
+    (test (and (eq ?s1 ?s2)(eq ?s3 ?s4)))
+    (test (and (eq ?s1 ?s3)(eq ?s1 ?s4)))
+=>
+    (assert (shape-is belah-ketupat))
+    )
+
 (defrule is-layangan
     (shape-is jajar-genjang)
-    (jenissudut siku)
-    (jenissudut lancip)
+    (besarsudut ?s1 ?s2 ?s3 ?s4)
+    (test (or(or(or(eq ?s1 90)(eq ?s2 90))(eq ?s3 90))(eq ?s4 90)))
+    (test (or(or(or(< ?s1 90)(< ?s2 90))(< ?s3 90))(< ?s4 90)))
 =>
     (assert (shape-is layangan))
     )
@@ -131,16 +142,25 @@
     (shape-is ~jajar-genjang)
     (besarsudut ?s1 ?s2 ?s3 ?s4)
     (test (and (eq ?s1 ?s2)(eq ?s3 ?s4)))
+    (test (neq ?s1 ?s3))
 =>
     (assert (shape-is trapesium-kaki))
     )
 
-(defrule is-trapesium-siku
+(defrule is-trapesium-siku-left
     (shape-is segiempat)
     (shape-is ~jajar-genjang)
-    (jenissudut siku)
+    (besarsudut ?s1 ?s2 ?s3 ?s4)
+    (test (and(eq ?s2 90)(eq ?s4 90)))
 =>
-    (assert (shape-is trapesium-siku))
+    (assert (shape-is trapesium-siku-left))
     )
 
-
+(defrule is-trapesium-siku-right
+    (shape-is segiempat)
+    (shape-is ~jajar-genjang)
+    (besarsudut ?s1 ?s2 ?s3 ?s4)
+    (test (and(eq ?s1 90)(eq ?s3 90)))
+=>
+    (assert (shape-is trapesium-siku-right))
+    )
